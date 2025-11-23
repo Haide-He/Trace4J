@@ -12,8 +12,22 @@ documentation for details.
 
 
 .. toctree::
-   :maxdepth: 2
-   :caption: Contents:
+   :maxdepth: 3
+   :caption: Trace4J Basics
 
-   getting_started
-   api/index
+   preface
+   install
+   manual
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Trace4J Development
+
+   workflow
+   gui
+
+Indices and Tables
+==================
+
+* :ref:`genindex`
+* :ref:`search`
