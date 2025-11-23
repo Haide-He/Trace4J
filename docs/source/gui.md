@@ -111,9 +111,7 @@ In Perfetto UI, you can:
 
 ### Example Screenshot
 
-```markdown
 ![TRACE4J GUI Overview](figures/gui.pdf)
-```
 
 ---
 
