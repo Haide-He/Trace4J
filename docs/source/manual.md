@@ -2,20 +2,20 @@
 
 ## Table of Contents
 
-1. [Profile Using TRACE4J](#profile-using-trace4j)
+1. [Profile Using Trace4J](#profile-using-trace4j)
 2. [Interpret Profile Data](#interpret-profile-data)
 3. [Example](#example)
 
 ---
 
-## Profile Using TRACE4J
+## Profile Using Trace4J
 
-The `trace4j` automates tracing and supports flexible control via flags.
+The `trace4j` automates tracing and supports flexible control via knobs.
 
 **Operation modes:**
 
-* **On-demand attach:** Attach TRACE4J to a running Java process.
-* **End-to-end launch:** Start a Java program directly under TRACE4J.
+* **On-demand attach:** Attach Trace4J to a running Java process.
+* **End-to-end launch:** Start a Java program directly under Trace4J.
 
 Typical usage:
 
@@ -32,12 +32,11 @@ Once tracing and processing are complete, use the web GUI to interpret results.
 The interface consists of **three panes**:
 
 1. **Top Pane – Execution Timeline**
-   Displays method execution instances as colored rectangles arranged chronologically.
+   displays method execution instances as colored rectangles arranged chronologically.
    Each rectangle’s length is proportional to its performance metric (e.g., retired instructions `PERF_COUNT_HW_INSTRUCTIONS`).
-   Hovering over a rectangle reveals the method name, execution time, and metric value.
 
 2. **Bottom-Left Pane – Instance Details**
-   Shows detailed information about the selected method instance, including:
+   shows detailed information about the selected method instance, including:
 
     * Method name and class
     * Call path (caller–callee chain)
@@ -48,8 +47,6 @@ The interface consists of **three panes**:
 
     * Number of occurrences
     * Total, mean, and dispersion of collected metrics
-    * Variability of instruction count across different call contexts
-
 
 ---
 
@@ -64,7 +61,7 @@ python3 $Trace4J_HOME/offlineprocess/process_raw_data.py
 ./$Trace4J_HOME/perfetto/ui/run-dev-server
 ```
 
-When the GUI opens, inspect the `MatrixMultiply.multiply` method. TRACE4J may show high cache-miss rates.
+When the GUI opens, inspect the `MatrixMultiply.multiply` method. Trace4J may show high cache-miss rates.
 
 ---
 
