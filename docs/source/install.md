@@ -4,8 +4,8 @@
 
 Before installing Trace4J, ensure the following prerequisites are met:
 
-*Intel Broadwell CPUs or later.
-*Linux x86-64 systems (kernel version ≥ 5.15).
+* Intel Broadwell CPUs or later.
+* Linux x86-64 systems (kernel version ≥ 5.15).
 * A JDK 8 or above installed and available in your `PATH`.
 * C/C++ tooling for building native components (e.g., GCC, Make, and CMake).
 * `perf_event_open` support enabled in your kernel, and system permissions to use PMUs (e.g., `CAP_SYS_ADMIN` or `perf_event_paranoid` appropriately configured).
