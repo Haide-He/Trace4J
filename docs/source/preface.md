@@ -1,10 +1,9 @@
 # Preface
 
-**TRACE4J** is a lightweight, flexible, and insightful performance tracing tool for Java, designed to bridge the gap between Java source code and its execution behavior on modern CPUs.
-It seamlessly integrates **CPU hardware facilities (PMUs and breakpoints)**, **JVM interfaces (JVMTI)**, and the **Linux perf_event** subsystem to deliver accurate and low-overhead runtime tracing for unmodified Java programs.
+**Trace4J** is a lightweight, flexible, and insightful performance tracing tool for Java, designed to bridge the gap between Java source code and its execution behavior on modern CPUs.
+It seamlessly integrates **CPU hardware facilities (PMUs and breakpoints)**, **JVM Tool Interface (JVMTI)**, and the **Linux perf_event** subsystem to deliver accurate and low-overhead runtime tracing for Java programs.
 
-Unlike traditional profilers or instrumentation-based analyzers, TRACE4J does **not** require code modifications or JVM patches. It works directly on standard JVMs and commodity x86 CPUs, supporting both **end-to-end tracing** and **on-demand tracing** modes.
-This makes TRACE4J suitable for both **development debugging** and **production performance analysis**.
+Trace4J requires no modifications to the Linux kernel, JVMs, or traced Java programs, supporting both **end-to-end** and **on-demand** tracing. This makes Trace4J suitable for both **development debugging** and **production performance analysis**.
 
 ---
 
@@ -12,23 +11,15 @@ This makes TRACE4J suitable for both **development debugging** and **production 
 
 ### Lightweight
 
-Uses hardware sampling and breakpoints to capture runtime events with ≤ 5 % overhead, even on complex applications.
+Combines hardware performance monitoring units (PMUs) and breakpoints to trace dynamic function instances with ≤ 5 % time and memory overhead.
 
 ### Flexible
 
-Supports configurable sampling periods and monitoring lengths, enabling users to balance tracing accuracy and performance overhead.
+Offers a user-adjustable monitoring length following each sampled function instance by resolving branches along the way, enabling users to balance tracing accuracy vs. overhead.
 
-### Insightful
+### Insightful/Accurate
 
-Collects rich hardware-level metrics such as CPU cycles, cache hits/misses, and retired instructions, providing actionable insights beyond simple timing data.
-
-### Non-intrusive
-
-Requires no modification to Java programs, JVM internals, or the Linux kernel.
-
-### Cross-layer Integration
-
-Combines JVM-level call tracing with hardware event counting, achieving function-level attribution of microarchitectural behavior.
+Collects rich and accurate function-level attribution of microarchitectural behavior, such as CPU cycles, cache hits/misses, and retired instructions, aimed at delivering acitionable optimization insights.
 
 ### Visualization
 
@@ -40,15 +31,15 @@ Provides an intuitive, Perfetto-based web GUI to visualize function timelines, c
 
 As illustrated in the following diagram:
 
-![TRACE4J Overview](figures/overview.pdf)
+![Trace4J Overview](figures/overview.pdf)
 
-TRACE4J consists of three main components:
+Trace4J consists of three main components:
 
 ### 1. Online Tracer
 
-* Attaches to running Java processes (end-to-end or on-demand).
-* Samples function calls via PMUs and monitors return events via hardware breakpoints.
-* Collects raw performance data without requiring JVM modifications.
+* Attaches to a (running) Java program.
+* Samples function calls via PMUs and intercepts returns via hardware breakpoints.
+* Offers a user-adjustable number of function instances following each function sample.
 
 ### 2. Offline Data Processor
 
