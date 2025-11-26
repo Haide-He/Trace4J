@@ -146,7 +146,3 @@ TRACE4J supports iterative optimization and validation.
 2. Map results to source code methods.
 3. Apply optimizations (e.g., replace linear search with hashmap lookup).
 4. Rebuild, rerun TRACE4J.
-
----
-
-**End of Manual**
