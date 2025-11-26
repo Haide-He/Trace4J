@@ -18,10 +18,3 @@ documentation for details.
    preface
    install
    manual
-
-.. toctree::
-   :maxdepth: 1
-   :caption: Trace4J Development
-
-   gui
-
