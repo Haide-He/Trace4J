@@ -37,14 +37,14 @@ Trace4J consists of three main components:
 
 ### 1. Online Tracer
 
-* Attaches to a (running) Java program.
+* Attaches to a (running) Java program(or launch Java program with Trace4J Supervision).
 * Samples function calls via PMUs and intercepts returns via hardware breakpoints.
-* Offers a user-adjustable number of function instances following each function sample.
+* Offers a user-adjustable monitoring length following each function sample.
 
 ### 2. Offline Data Processor
 
 * Converts raw traces into **granular** and **aggregate** formats.
-* Supports statistical analysis such as **mean**, **dispersion**, and **coefficient of variation**.
+* Supports statistical analysis such as **mean**, **dispersion**, and **instance count**.
 
 ### 3. Web-based GUI
 

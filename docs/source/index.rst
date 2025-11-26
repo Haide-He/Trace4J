@@ -25,8 +25,3 @@ documentation for details.
 
    gui
 
-Indices and Tables
-==================
-
-* :ref:`genindex`
-* :ref:`search`
