@@ -23,7 +23,6 @@ documentation for details.
    :maxdepth: 1
    :caption: Trace4J Development
 
-   workflow
    gui
 
 Indices and Tables

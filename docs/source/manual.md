@@ -1,4 +1,4 @@
-# Trace4J User Manual
+# Manual
 
 ## Table of Contents
 

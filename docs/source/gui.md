@@ -106,7 +106,7 @@ Go to [http://127.0.0.1:8888](http://127.0.0.1:8888) and upload the file `your_t
 In Perfetto UI, you can:
 
 * Zoom and pan along the timeline
-* Filter by Java methods, threads
+* Filter by threads
 * View hardware counters such as CPU cycles or cache misses
 
 ### Example Screenshot
