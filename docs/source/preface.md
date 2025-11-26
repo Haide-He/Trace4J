@@ -29,17 +29,14 @@ Provides an intuitive, Perfetto-based web GUI to visualize function timelines, c
 
 ## Design Overview
 
-As illustrated in the following diagram:
+As illustrated in the following diagram, Trace4J consists of three main components:
 
 ![Trace4J Overview](figures/overview.png)
 
-Trace4J consists of three main components:
-
 ### 1. Online Tracer
 
-* Attaches to a (running) Java program(or launch Java program with Trace4J Supervision).
-* Samples function calls via PMUs and intercepts returns via hardware breakpoints.
-* Offers a user-adjustable monitoring length following each function sample.
+* Attaches to a running Java program or launches a Java program with Trace4J supervision.
+* Achieves precise function-instance performance attribution using an integrated technique that fuses hardware PMUs with breakpoint-driven tracing.
 
 ### 2. Offline Data Processor
 
@@ -48,5 +45,5 @@ Trace4J consists of three main components:
 
 ### 3. Web-based GUI
 
-* Built atop **Perfetto UI**.
-* Allows users to navigate traces, inspect function instances, and analyze hotspots interactively.
+* Built atop **[Perfetto UI](https://ui.perfetto.dev)**.
+* Helps users navigate traces, inspect function instances, and analyze critical metrics interactively.
