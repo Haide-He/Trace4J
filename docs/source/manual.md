@@ -134,7 +134,7 @@ java -agentpath:$Trace4J_HOME/build/libagent.so=VARIANCE::BR_INST_RETIRED.NEAR_C
 python3 $Trace4J_HOME/offlineprocess/process_raw_data.py
 ./$Trace4J_HOME/perfetto/ui/run-dev-server
 ```
-![TRACE4J GUI Overview](figures/gui.pdf)
+![TRACE4J GUI Overview](figures/gui.png)
 
 ---
 
