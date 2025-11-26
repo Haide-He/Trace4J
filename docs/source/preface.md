@@ -31,7 +31,7 @@ Provides an intuitive, Perfetto-based web GUI to visualize function timelines, c
 
 As illustrated in the following diagram:
 
-![Trace4J Overview](figures/overview.pdf)
+![Trace4J Overview](figures/overview.png)
 
 Trace4J consists of three main components:
 
