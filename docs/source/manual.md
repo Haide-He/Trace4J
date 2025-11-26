@@ -127,7 +127,7 @@ Then open your browser at:
 
 ### Example
 
-Example: profiling a SableCC workload.
+Example: profile a [SableCC](https://sablecc.org) workload.
 
 ```bash
 java -agentpath:$Trace4J_HOME/build/libagent.so=VARIANCE::BR_INST_RETIRED.NEAR_CALL@100000,PERF_COUNT_HW_INSTRUCTIONS,100 -jar sablecc.jar java-1.5.sablecc
