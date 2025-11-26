@@ -6,9 +6,9 @@
 Trace4J documentation
 =====================
 
-Add your content using ``reStructuredText`` syntax. See the
-`reStructuredText <https://www.sphinx-doc.org/en/master/usage/restructuredtext/index.html>`_
-documentation for details.
+**Trace4J** is a lightweight, flexible, and insightful performance tracing tool for Java. **Trace4J**’s code is available on
+`Github <https://github.com/Haide-He/Trace4J.git>`_
+.
 
 
 .. toctree::
