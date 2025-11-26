@@ -29,6 +29,24 @@ docker load -i trace4j_ae.tar
 ```
 
 This package includes a ready-to-run Docker image with Trace4J and all dependencies.
+To run Trace4J reproducibly inside the container:
+
+```bash
+docker run --rm \
+  --cap-add SYS_ADMIN \
+  --cap-add SYS_PTRACE \
+  --security-opt seccomp=unconfined \
+  -p 8888:8888 \
+  -it trace4j_ae /bin/bash
+```
+
+Inside the container:
+
+```bash
+./scripts/install.sh  
+```
+
+---
 
 ### Option 2 — Build from Source
 
@@ -47,36 +65,6 @@ This package includes a ready-to-run Docker image with Trace4J and all dependenc
 
 ---
 
-## Docker / Reproducible Image
-
-For reproducible experiments (especially for artifact evaluation or production deployment), Trace4J provides a ready-to-use Docker image:
-
-
-```bash 
-docker run --rm \
-  --cap-add SYS_ADMIN \
-  --cap-add SYS_PTRACE \
-  --security-opt seccomp=unconfined \
-  -p 8888:8888 \
-  -it trace4j_ae /bin/bash
-```
-
-Inside the container:
-
-```bash
-./scripts/install.sh  
-```
-
-Then start the GUI:
-
-```bash
-./scripts/GUI.sh  
-```
-
-On your host machine, map port 8888 and open the GUI at [http://127.0.0.1:8888](http://127.0.0.1:8888).
-
----
-
 ## Environment Variables & PATH Setup
 
 Once installed, you may need to set or export environment variables to use Trace4J smoothly:
@@ -89,4 +77,3 @@ export LD_LIBRARY_PATH=$Trace4J_HOME/lib:$LD_LIBRARY_PATH
 ```
 
 If you use the Docker image, these environment variables are preconfigured automatically.
-
