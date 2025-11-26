@@ -35,12 +35,8 @@ docker run --rm \
 Inside the container:
 
 ```bash
-./scripts/GUI.sh
+./scripts/install.sh
 ```
-
-Then on your host machine use ssh tunnel to link to sever then open:
-
-> [http://127.0.0.1:8888](http://127.0.0.1:8888)
 
 ---
 
@@ -55,13 +51,12 @@ If you want to use the GUI outside Docker:
    cd Trace4J/perfetto
    ```
    
-2. **Launch**
+2. **Build**
 
    ```bash
-   /ui/run-dev-server
+   tools/install-build-deps --ui
+   ui/build
    ```
-3. Visit [http://localhost:9000](http://localhost:9000) in your browser.
-   You can now load TRACE4J trace files (`.pftrace`) directly.
 
 ---
 
