@@ -1,0 +1,3 @@
+[submodule "benchmarks/renaissance"]
+	path = benchmarks/renaissance
+	url = https://github.com/renaissance-benchmarks/renaissance.git
