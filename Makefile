@@ -8,6 +8,7 @@ thirdparty:
 	cd thirdparty/libpfm-4.13.0 &&  make PREFIX=$(CURRENT_DIR)/build/thirdparty install
 	cd thirdparty/boost && sh ./bootstrap.sh --prefix=$(CURRENT_DIR)/build/thirdparty --with-libraries="filesystem"  cxxflags="-std=c++11" && ./b2 -j 4 && ./b2 filesystem install 
 	#cd thirdparty/bintrees && python setup.py install --user
+	cd thirdparty/kissmalloc && ./build.sh && mv libkissmalloc.so* $(CURRENT_DIR)/build/thirdparty/lib
 	mkdir $(CURRENT_DIR)/build/preload
 	cd preload && make
 	cd src && make
