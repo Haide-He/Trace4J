@@ -111,7 +111,7 @@ In Perfetto UI, you can:
 
 ### Example Screenshot
 
-![TRACE4J GUI Overview](figures/gui.pdf)
+![TRACE4J GUI Overview](figures/gui.png)
 
 ---
 
