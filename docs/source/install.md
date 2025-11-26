@@ -17,7 +17,7 @@ Before installing Trace4J, ensure the following prerequisites are met:
 
 You can either **download the prebuilt artifact from Zenodo** or **build from source**.
 
-### Option 1 — Download Prebuilt Package (Recommended)
+### Option 1 — Download Prebuilt Package
 
 The latest official release is available at Zenodo:
 👉 [https://doi.org/10.5281/zenodo.16900736](https://doi.org/10.5281/zenodo.16900736)
@@ -65,9 +65,9 @@ Inside the container:
 
 ---
 
-## Environment Variables & PATH Setup
+## Environment Variables & Path Setup
 
-Once installed, you may need to set or export environment variables to use Trace4J smoothly:
+Once installed, you may need to set the following environment variables to use Trace4J smoothly:
 
 ```bash
 export PRECISE_IP=1
