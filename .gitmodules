@@ -7,3 +7,6 @@
 [submodule "thirdparty/bintrees"]
 	path = thirdparty/bintrees
 	url = https://github.com/mozman/bintrees.git
+[submodule "thirdparty/jattach"]
+	path = thirdparty/jattach
+	url = https://github.com/jattach/jattach.git
