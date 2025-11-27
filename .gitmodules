@@ -4,3 +4,6 @@
 [submodule "thirdparty/boost"]
 	path = thirdparty/boost
 	url = https://github.com/bolunli11/boost-1_71_0.git
+[submodule "thirdparty/bintrees"]
+	path = thirdparty/bintrees
+	url = https://github.com/mozman/bintrees.git
