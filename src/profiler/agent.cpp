@@ -25,6 +25,8 @@ JavaVM* JVM::_jvm = nullptr;
 jvmtiEnv* JVM::_jvmti = nullptr;
 Argument* JVM::_argument = nullptr;
 
+bool onload_flag = false;
+
 void JVM::parseArgs(const char *arg) {
   _argument = new(std::nothrow) Argument(arg);
   assert(_argument);
@@ -201,97 +203,115 @@ static void JNICALL callbackClassPrepare(jvmtiEnv* jvmti, JNIEnv* jni, jthread t
     // UNBLOCK_SAMPLE;
 }
 
+void JVM::loadMethodIDs(jvmtiEnv* jvmti, jclass klass) {
+jint method_count;
+jmethodID* methods;
+if (jvmti->GetClassMethods(klass, &method_count, &methods) == 0) {
+jvmti->Deallocate((unsigned char*)methods);
+}
+}
+
+void JVM::loadAllMethodIDs(jvmtiEnv* jvmti) {
+    jint class_count;
+    jclass* classes;
+    if (jvmti->GetLoadedClasses(&class_count, &classes) == 0) {
+        for (int i = 0; i < class_count; i++) {
+            loadMethodIDs(jvmti, classes[i]);
+        }
+        jvmti->Deallocate((unsigned char*)classes);
+    }
+}
 
 
 /////////////
 // METHODS //
 /////////////
-bool JVM::init(JavaVM *jvm, const char *arg) {
-  jvmtiError error;
-  jint res;
-  jvmtiEventCallbacks callbacks;
+bool JVM::init(JavaVM *jvm, const char *arg, bool attach) {
+    jvmtiError error;
+    jint res;
+    jvmtiEventCallbacks callbacks;
 
-  _jvm = jvm;
+    _jvm = jvm;
 
-  // parse the input arguments
-  parseArgs(arg);
+    // parse the input arguments
+    parseArgs(arg);
 
-  //////////////////////////
-  // Init JVMTI environment:
-  res = _jvm->GetEnv((void **) &_jvmti, JVMTI_VERSION_1_0);
-  if (res != JNI_OK || _jvmti == NULL) {
-    ERROR("Unable to access JVMTI Version 1 (0x%x),"
-    " is your J2SE a 1.5 or newer version?"
-    " JNIEnv's GetEnv() returned %d\n",
-    JVMTI_VERSION_1, res);
-    return false;
-  }
-  
-  {
-    jvmtiJlocationFormat location_format;
-    error = _jvmti->GetJLocationFormat(&location_format);
-    assert(check_jvmti_error(error, "can't get location format"));
-    assert(location_format == JVMTI_JLOCATION_JVMBCI);//currently only support this implementation
-  }
+    //////////////////////////
+    // Init JVMTI environment:
+    res = _jvm->GetEnv((void **) &_jvmti, JVMTI_VERSION_1_0);
+    if (res != JNI_OK || _jvmti == NULL) {
+        ERROR("Unable to access JVMTI Version 1 (0x%x),"
+              " is your J2SE a 1.5 or newer version?"
+              " JNIEnv's GetEnv() returned %d\n",
+              JVMTI_VERSION_1, res);
+        return false;
+    }
+
+    {
+        jvmtiJlocationFormat location_format;
+        error = _jvmti->GetJLocationFormat(&location_format);
+        assert(check_jvmti_error(error, "can't get location format"));
+        assert(location_format == JVMTI_JLOCATION_JVMBCI);//currently only support this implementation
+    }
 
 
-  /////////////////////
-  // Init capabilities:
-  jvmtiCapabilities capa;
-  memset(&capa, '\0', sizeof(jvmtiCapabilities));
-  // capa.can_generate_all_class_hook_events = 1;
+    /////////////////////
+    // Init capabilities:
+    jvmtiCapabilities capa;
+    memset(&capa, '\0', sizeof(jvmtiCapabilities));
+    // capa.can_generate_all_class_hook_events = 1;
 
-  capa.can_generate_garbage_collection_events = 1;
-  capa.can_get_source_file_name = 1; 
-  capa.can_get_line_numbers = 1; 
-  capa.can_generate_method_entry_events = 1; // This one must be enabled in order to get the stack trace
-  capa.can_generate_compiled_method_load_events = 1;
+    capa.can_generate_garbage_collection_events = 1;
+    capa.can_get_source_file_name = 1;
+    capa.can_get_line_numbers = 1;
+    capa.can_generate_method_entry_events = 1; // This one must be enabled in order to get the stack trace
+    capa.can_generate_compiled_method_load_events = 1;
 
-  error = _jvmti->AddCapabilities(&capa);
-  check_jvmti_error(error, "Unable to get necessary JVMTI capabilities.");
+    error = _jvmti->AddCapabilities(&capa);
+    check_jvmti_error(error, "Unable to get necessary JVMTI capabilities.");
 
 //////////////////
 // Init callbacks:
-  memset(&callbacks, 0, sizeof(callbacks));
-  callbacks.VMInit = &callbackVMInit;
-  callbacks.VMDeath = &callbackVMDeath;
-  callbacks.ThreadStart = &callbackThreadStart;
-  callbacks.ThreadEnd = &callbackThreadEnd;
-  callbacks.GarbageCollectionFinish = &callbackGCEnd;
-  callbacks.CompiledMethodLoad = &callbackCompiledMethodLoad;
-  callbacks.CompiledMethodUnload = &callbackCompiledMethodUnload;
-  callbacks.ClassLoad = &callbackClassLoad;
-  callbacks.ClassPrepare = &callbackClassPrepare;
+    memset(&callbacks, 0, sizeof(callbacks));
+    callbacks.VMInit = &callbackVMInit;
+    callbacks.VMDeath = &callbackVMDeath;
+    callbacks.ThreadStart = &callbackThreadStart;
+    callbacks.ThreadEnd = &callbackThreadEnd;
+    callbacks.GarbageCollectionFinish = &callbackGCEnd;
+    callbacks.CompiledMethodLoad = &callbackCompiledMethodLoad;
+    callbacks.CompiledMethodUnload = &callbackCompiledMethodUnload;
+    callbacks.ClassLoad = &callbackClassLoad;
+    callbacks.ClassPrepare = &callbackClassPrepare;
 
-  error = _jvmti->SetEventCallbacks(&callbacks, (jint)sizeof(callbacks));
-  check_jvmti_error(error, "Cannot set jvmti callbacks");
-  
-  ///////////////
-  // Init events:
-  error = _jvmti->SetEventNotificationMode(JVMTI_ENABLE, JVMTI_EVENT_VM_INIT, (jthread)NULL);
-  check_jvmti_error(error, "Cannot set event notification");
-  error = _jvmti->SetEventNotificationMode(JVMTI_ENABLE, JVMTI_EVENT_VM_DEATH, (jthread)NULL);
-  check_jvmti_error(error, "Cannot set event notification");
-  error = _jvmti->SetEventNotificationMode(JVMTI_ENABLE, JVMTI_EVENT_THREAD_START, (jthread)NULL);
-  check_jvmti_error(error, "Cannot set event notification");
-  error = _jvmti->SetEventNotificationMode(JVMTI_ENABLE, JVMTI_EVENT_THREAD_END, (jthread)NULL);
-  check_jvmti_error(error, "Cannot set event notification");
-  error = _jvmti->SetEventNotificationMode(JVMTI_ENABLE, JVMTI_EVENT_GARBAGE_COLLECTION_FINISH, (jthread)NULL);
-  check_jvmti_error(error, "Cannot set event notification");
-  error = _jvmti->SetEventNotificationMode(JVMTI_ENABLE, JVMTI_EVENT_COMPILED_METHOD_LOAD, (jthread)NULL);
-  check_jvmti_error(error, "Cannot set event notification");
-  error = _jvmti->SetEventNotificationMode(JVMTI_ENABLE, JVMTI_EVENT_COMPILED_METHOD_UNLOAD, (jthread)NULL);
-  check_jvmti_error(error, "Cannot set event notification");
-  error = _jvmti->SetEventNotificationMode(JVMTI_ENABLE, JVMTI_EVENT_DYNAMIC_CODE_GENERATED, (jthread)NULL);
-  check_jvmti_error(error, "Cannot set event notification");
-  error = _jvmti->SetEventNotificationMode(JVMTI_ENABLE, JVMTI_EVENT_CLASS_LOAD, (jthread)NULL);
-  check_jvmti_error(error, "Cannot set event notification");
-  error = _jvmti->SetEventNotificationMode(JVMTI_ENABLE, JVMTI_EVENT_CLASS_PREPARE, (jthread)NULL);
-  check_jvmti_error(error, "Cannot set event notification");
+    error = _jvmti->SetEventCallbacks(&callbacks, (jint)sizeof(callbacks));
+    check_jvmti_error(error, "Cannot set jvmti callbacks");
 
-  Profiler::getProfiler().init();
+    ///////////////
+    // Init events:
+    error = _jvmti->SetEventNotificationMode(JVMTI_ENABLE, JVMTI_EVENT_VM_INIT, (jthread)NULL);
+    check_jvmti_error(error, "Cannot set event notification");
+    error = _jvmti->SetEventNotificationMode(JVMTI_ENABLE, JVMTI_EVENT_VM_DEATH, (jthread)NULL);
+    check_jvmti_error(error, "Cannot set event notification");
+    error = _jvmti->SetEventNotificationMode(JVMTI_ENABLE, JVMTI_EVENT_THREAD_START, (jthread)NULL);
+    check_jvmti_error(error, "Cannot set event notification");
+    error = _jvmti->SetEventNotificationMode(JVMTI_ENABLE, JVMTI_EVENT_THREAD_END, (jthread)NULL);
+    check_jvmti_error(error, "Cannot set event notification");
+    error = _jvmti->SetEventNotificationMode(JVMTI_ENABLE, JVMTI_EVENT_GARBAGE_COLLECTION_FINISH, (jthread)NULL);
+    check_jvmti_error(error, "Cannot set event notification");
+    error = _jvmti->SetEventNotificationMode(JVMTI_ENABLE, JVMTI_EVENT_COMPILED_METHOD_LOAD, (jthread)NULL);
+    check_jvmti_error(error, "Cannot set event notification");
+    error = _jvmti->SetEventNotificationMode(JVMTI_ENABLE, JVMTI_EVENT_COMPILED_METHOD_UNLOAD, (jthread)NULL);
+    check_jvmti_error(error, "Cannot set event notification");
+    error = _jvmti->SetEventNotificationMode(JVMTI_ENABLE, JVMTI_EVENT_DYNAMIC_CODE_GENERATED, (jthread)NULL);
+    check_jvmti_error(error, "Cannot set event notification");
+    error = _jvmti->SetEventNotificationMode(JVMTI_ENABLE, JVMTI_EVENT_CLASS_LOAD, (jthread)NULL);
+    check_jvmti_error(error, "Cannot set event notification");
+    error = _jvmti->SetEventNotificationMode(JVMTI_ENABLE, JVMTI_EVENT_CLASS_PREPARE, (jthread)NULL);
+    check_jvmti_error(error, "Cannot set event notification");
 
-  return true;
+    Profiler::getProfiler().init();
+
+    return true;
 }
 
 bool JVM::shutdown() {
@@ -312,8 +332,9 @@ JNIEXPORT jint JNICALL Agent_OnLoad(JavaVM *jvm, char *options, void *reserved) 
   // bool pause = true; while(pause);
 
   BLOCK_SAMPLE;
+  onload_flag = true;
   INFO("Agent argument = %s\n", options);
-  if (!JVM::init(jvm, options)) {
+  if (!JVM::init(jvm, options, false)) {
     UNBLOCK_SAMPLE;
     return JNI_ERR;
   }
@@ -324,11 +345,33 @@ JNIEXPORT jint JNICALL Agent_OnLoad(JavaVM *jvm, char *options, void *reserved) 
 }
 
 /**
+* Agent entry point
+*/
+JNIEXPORT jint JNICALL Agent_OnAttach(JavaVM *jvm, char *options, void *reserved) {
+    BLOCK_SAMPLE;
+    onload_flag = false;
+    if(options[strlen(options)-1] == 's') {
+        printf("profiler start; %s\n", options);
+        options[strlen(options)-1] = '\0';
+        JVM::init(jvm, options, true);
+    }
+    else {
+        printf("profiler end\n");
+        JVM::shutdown();
+    }
+    UNBLOCK_SAMPLE;
+    return 0;
+}
+
+
+/**
 * Agent exit point. Last code executed.
 */
 JNIEXPORT void JNICALL Agent_OnUnload(JavaVM *vm) {
   BLOCK_SAMPLE;
-  JVM::shutdown();
-  INFO("Agent_OnUnload\n");
+    if (onload_flag) {
+      JVM::shutdown();
+      INFO("Agent_OnUnload\n");
+    }
   UNBLOCK_SAMPLE;
 }
