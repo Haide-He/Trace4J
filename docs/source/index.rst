@@ -3,7 +3,7 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Trace4J documentation
+Trace4J: A Performance Tracing Tool for Java
 =====================
 
 **Trace4J** is a lightweight, flexible, and insightful performance tracing tool for Java. **Trace4J**’s code is available on
