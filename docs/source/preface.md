@@ -36,7 +36,7 @@ As illustrated in the following diagram, Trace4J consists of three main componen
 ### 1. Online Tracer
 
 * Attaches to a running Java program or launches a Java program with Trace4J supervision.
-* Achieves precise function-instance performance attribution using an integrated technique that fuses hardware PMUs with breakpoint-driven tracing.
+* Achieves precise function instance-level performance attribution using an integrated technique that fuses hardware PMUs with breakpoint-driven tracing.
 
 ### 2. Offline Data Processor
 
