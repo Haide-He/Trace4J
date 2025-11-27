@@ -1,3 +1,0 @@
-Package {
-    include: [ bench, bench_libc, bench_threads, bench_threads_libc, bench_std_list, bench_std_list_libc, bench_mmap ]
-}

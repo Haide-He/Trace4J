@@ -1,4 +1,0 @@
-Application {
-    name: kissbench_threads_libc
-    source: *.c
-}

@@ -10,3 +10,6 @@
 [submodule "thirdparty/jattach"]
 	path = thirdparty/jattach
 	url = https://github.com/jattach/jattach.git
+[submodule "thirdparty/kissmalloc"]
+	path = thirdparty/kissmalloc
+	url = https://github.com/frankencode/kissmalloc.git
