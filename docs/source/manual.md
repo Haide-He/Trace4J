@@ -17,7 +17,7 @@ Before running Trace4J, ensure the hardware components are properly configured.
 ### Preparation Steps
 
 * Ensure **PMU** and **hardware breakpoint** features are available on your system.
-* In containers or restricted environments, verify that `perf_event_open` are permitted.
+* In containers or restricted environments, verify `perf_event_open` is permitted.
 
 ### Environment Verification
 
@@ -45,10 +45,10 @@ The **Tracer** can attach to a running Java program or launch a Java program and
 
 ### Features
 
-* **Attaches to a running Java program or launches a new one from stratch.
-* **Samples function calls** using the PMU call event (`BR_INST_RETIRED.NEAR_CALL`).
-* **Intercepts function returns** through hardware breakpoints for function instance-level performance tracing.
-* **Configurable tracing depth** — traces a user-adjustable number of function instances following each function sample.
+* Attaches to a running Java program or launches a new one from stratch.
+* Samples function calls using the PMU call event (`BR_INST_RETIRED.NEAR_CALL`).
+* Intercepts function returns through hardware breakpoints for function instance-level performance tracing.
+* Configurable tracing depth — traces a user-adjustable number of function instances following each function sample.
 
 ### Usage
 
@@ -85,7 +85,7 @@ python3 offlineprocess/process_raw_data.py
 
 ### Operations
 
-* Map function instance-level metrics to corresponding call path.
+* Associate metrics with function call paths.
 * Export data for visualization.
 
 ### Output
@@ -98,7 +98,7 @@ python3 offlineprocess/process_raw_data.py
 
 ### Overview
 
-The **Web-based GUI** provides an interactive environment for exploring and analyzing trace results. It is built atop **Perfetto UI**, offering hierarchical and temporal insights into Java method instance-level performance.
+The **Web-based GUI** provides an interactive environment for exploring and analyzing trace results. It is built atop **Perfetto UI**, offering hierarchical and temporal insights into Java function instance-level performance.
 
 ### Launch GUI
 
@@ -112,11 +112,11 @@ Then open your browser at:
 ### Interface Layout
 
 1. **Timeline Pane (Top):**
-   Displays method execution instances as rectangles ordered chronologically.
-   Each rectangle’s length represents a performance metric (e.g., `PERF_COUNT_HW_INSTRUCTIONS`).
+   Displays function execution instances as rectangles ordered chronologically.
+   Each rectangle’s length is proportional to its metric value (e.g., `PERF_COUNT_HW_INSTRUCTIONS`).
 
 2. **Details Pane (Bottom Left):**
-   Shows metadata of a selected instance — method name, call path, and performance metrics.
+   Shows metadata of a selected function instance — name, call path, and performance metrics.
 
 3. **Aggregate Pane (Bottom Right):**
    Displays aggregated statistics:
