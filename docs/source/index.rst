@@ -7,7 +7,7 @@ Trace4J documentation
 =====================
 
 **Trace4J** is a lightweight, flexible, and insightful performance tracing tool for Java. **Trace4J**’s code is available on
-`Github <https://github.com/Haide-He/Trace4J.git>`.
+`Github <https://github.com/Haide-He/Trace4J.git>`_.
 
 .. toctree::
    :maxdepth: 3
