@@ -19,6 +19,7 @@ export Trace4J_HOME=/path/to/Trace4J
 export PATH=$Trace4J_HOME/bin:$PATH
 export LD_LIBRARY_PATH=$Trace4J_HOME/lib:$LD_LIBRARY_PATH
 export PRECISE_IP=1
+```
 
 ## Documentation
 
