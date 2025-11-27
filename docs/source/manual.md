@@ -135,6 +135,7 @@ python3 $Trace4J_HOME/offlineprocess/process_raw_data.py
 ```
 
 View the generated .pftrace file in the GUI:
+
 ![TraceJ GUI Overview](figures/gui.png)
 
 ---
@@ -144,6 +145,9 @@ View the generated .pftrace file in the GUI:
 Trace4J supports iterative optimization and validation.
 
 a. Map results to source code functions.
+
 b. Identify hot functions whose per-instance performance shows significant dispersion.
+
 c. Apply optimizations (e.g., replace linear search with hashmap lookup).
+
 d. Rebuild, rerun Trace4J.
